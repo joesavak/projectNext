@@ -1,3 +1,4 @@
+require('dotenv').config();
 // for express.js playing
 var express = require('express'),
     config = require('./server/configure'),

@@ -42,10 +42,12 @@ module.exports = function(app) {
     // routes above
  
      routes.initialize(app, new express.Router);
-     app.use('/public/', express.static(path.join(__dirname, '../public')))
+     app.use('/public/', express.static(path.join(__dirname, '../public')));
       // app.get('/', routes.index);
-      if (app.get('env') === 'development') {
-        app.use(errorHandler())
+    
+    if (process.env.NODE_ENV === 'development') {
+        console.log(process.env.NODE_ENV);
+        app.use(errorHandler());
       }
     return app;
 }
