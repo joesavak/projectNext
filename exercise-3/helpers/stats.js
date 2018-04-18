@@ -17,7 +17,6 @@ module.exports = function(callback) {
                 viewsTotal : { $sum : '$views' }
             }}], function(err, result) {
                 var viewsTotal = 0;
-                if (err) next(err);
                 if (result.length > 0) {
                     viewsTotal += result[0].viewsTotal;
                 }
