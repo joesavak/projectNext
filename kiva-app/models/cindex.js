@@ -35,5 +35,4 @@ var corruptSchema = new Schema({
 });
 
 
-
 module.exports = mongoose.model('corrupt', corruptSchema);

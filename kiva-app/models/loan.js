@@ -3,7 +3,7 @@ var mongoose = require('mongoose'),
     path = require('path'),
     Cindex =require('./cindex');
 
-mongoose.set('debug', true);
+mongoose.set('debug', true); // shows calls against mongoDB. Should be turned off in prod.
 
 var loanSchema = new Schema({
     loans: {
@@ -98,12 +98,16 @@ var loanSchema = new Schema({
             type: 'Array'
         }
     }
-}, {toJSON: {virtuals:true}, toObject:{virtuals:true}});
+}, {
+    toJSON: {virtuals:true},  //allows virtual attributes to show up when doing toJSON calls
+    toObject:{virtuals:true} // allows virtuals to show up when doing toObject calls
+});
 
+//definition of virtual object
 loanSchema.virtual('corruption', {
-    ref:'corrupt',
-    localField: 'location.country',
-    foreignField: 'Country',
+    ref:'corrupt', //name of the model exported
+    localField: 'location.country', //what from loans collection to join on
+    foreignField: 'Country', //what from corrupt collection to join on
     justOne: true
 });
 
