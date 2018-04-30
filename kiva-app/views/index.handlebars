@@ -4,17 +4,70 @@
             Most Recent Loans
         </h3>
 
-    
-        {{#each loans}}
-        <div class="card" style="width: 18rem;">
-            <a class="card-link" href="https://www.kiva.org/lend/{{id}}">
-                <img class="card-img-top" width="288" height="288" src="https://www.kiva.org/img/288x288/{{image.id}}.jpg}">
-            </a>
-             <div class="card-body">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">{{name}} from {{location.country}} is requesting {{loan_amount}} {{use}}</li>
-                    <li class="list-group-item">{{location.country}} has a corruption index of blah</li>
-                </ul>
-             </div>
-        </div>
+        <div class="row">
+            {{#each loans}} 
+            <div class="card" style="width: 18rem">
+                <a class="card-link" href="https://www.kiva.org/lend/{{id}}">
+                    <img class="card-img-top" width="288" height="288" src="https://www.kiva.org/img/288x288/{{image.id}}.jpg}">
+                </a>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">{{name}} from {{location.country}} is requesting {{loan_amount}} {{use}}</li>
+                        <li class="list-group-item">{{location.country}} has a corruption index of {{corruption.CPI_score_2017 }}</li>
+                        <li class="list-group-item"><div id="chartContainer{{id}}"></div></li>
+                        <script type="text/javascript">
+                            var chart{{id}}= new CanvasJS.Chart("chartContainer{{id}}", {
+                                title :{
+                                    text: "{{location.country}} corruption index"
+                                },
+                                height:100,
+                                data: [{
+                                    type:"spline",
+                                    dataPoints: [
+                                        { x: new Date(2017, 0), y: {{#if corruption.CPI_score_2017}}
+                                                                        {{corruption.CPI_score_2017}},
+                                                                    {{else}}
+                                                                        0,
+                                                                    {{/if}}
+                                        },
+                                        { x: new Date(2016, 1), y: {{#if corruption.CPI_score_2016}}
+                                                                        {{corruption.CPI_score_2016}},
+                                                                    {{else}}
+                                                                        0,
+                                                                    {{/if}}
+                                        },
+                                        { x: new Date(2015, 2), y: {{#if corruption.CPI_score_2015}}
+                                                                        {{corruption.CPI_score_2015}},
+                                                                    {{else}}
+                                                                        0,
+                                                                    {{/if}}
+                                        },
+                                        { x: new Date(2014, 3), y: {{#if corruption.CPI_score_2014}}
+                                                                        {{corruption.CPI_score_2014}},
+                                                                    {{else}}
+                                                                        0,
+                                                                    {{/if}}
+                                        },
+                                        { x: new Date(2013, 4), y: {{#if corruption.CPI_score_2013}}
+                                                                        {{corruption.CPI_score_2013}},
+                                                                    {{else}}
+                                                                        0,
+                                                                    {{/if}}
+                                        },
+                                        { x: new Date(2012, 5), y: {{#if corruption.CPI_score_2012}}
+                                                                        {{corruption.CPI_score_2012}}
+                                                                    {{else}}
+                                                                        0
+                                                                    {{/if}}
+                                        }
+                                    ]
+                                }]
+                            });
+                            chart{{id}}.render();
+                            console.log("#chartContainer{{id}}");
+                        </script>
+                    </ul>
+                </div>
+            </div>
         {{/each}}
+        </div>

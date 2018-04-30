@@ -11,6 +11,15 @@ Then removed paging structure:
 Formatted loans structure to end cleanly for valid-json.
 
 ##### MongoDB load
-Loaded into an initial collection for parsing by script:
+Loaded via:
 
-`mongoimport --db kivaDB -c testData --file loans.json`
+`mongoimport --db kivaDB -c loans --file loans.json`
+
+#### Corruption Index:
+##### Retrieval:
+Pulled from https://www.transparency.org, a download of the CPI 2017 XLSX dataset. Standard deviation columns were removed and re-saved as a csv.
+
+#### MongoDB load
+Loaded via:
+
+`mongoimport --db kivaDB -c cindex --file corruption-index.csv --type csv --headerline`

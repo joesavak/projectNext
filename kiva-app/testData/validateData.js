@@ -1,14 +1,17 @@
+'use strict'
 var mongoose = require('mongoose'),
-    Schema = mongoose.Schema;
+    Schema = mongoose.Schema,
+    autopopulate = require('mongoose-autopopulate');
 
     //connect to local datastore
 mongoose.connect('mongodb://localhost/kivaDB');
 mongoose.connection.on('open', function () {
     console.log('Mongoose connected');
 });
+mongoose.set('debug', true);
 
 //set schema, based on https://transform.now.sh/json-to-mongoose
-var loan = new Schema({
+var loanSchema = new Schema({
     loans: {
         id: {
             type: 'Number'
@@ -58,9 +61,7 @@ var loan = new Schema({
             country_code: {
                 type: 'String'
             },
-            country: {
-                type: 'String'
-            },
+            country: { type: 'String'},
             town: {
                 type: 'String'
             },
@@ -101,23 +102,77 @@ var loan = new Schema({
             type: 'Array'
         }
     }
+}, {
+    toObject:{virtuals:true},
+    toJSON:{virtuals:true}
 });
 
-//set the model
-var loanModel = mongoose.model('Loan', loan);
-
-//perform search - similar to select * from loans limit 5;
-loanModel.find({},{},{limit:5,sort:{timestamp:-1}},
-    function(err,ls) {
-        if(err){throw err;}
-        //print out to make sure we got 5 back
-        console.log(ls.length);
-        
-        //iterate through the 5 and print specific items from the data-set for spot-checking
-        for (var i = 0; i<ls.length; i++) {
-            var loanitem = ls[i].toObject();
-            console.log(loanitem.id);
-            console.log(loanitem.loan_amount);
-            console.log(loanitem.name);
+var corruptSchema = new Schema({
+    corrupts: {
+        Country : {
+            type: 'String'
+        },
+        ISO3: {
+            type: 'String'
+        },
+        Region: {
+            type: 'String'
+        },
+        CPI_score_2017: {
+            type: 'Number'
+        },
+        CPI_score_2016: {
+            type: 'Number'
+        },
+        CPI_score_2015: {
+            type: 'Number'
+        },
+        CPI_score_2014: {
+            type: 'Number'
+        },
+        CPI_score_2013: {
+            type: 'Number'
+        },
+        CPI_score_2012: {
+            type: 'Number'
         }
-    });
+    }
+});
+
+loanSchema.virtual('corruption', {
+    ref:'corrupt',
+    localField: 'location.country',
+    foreignField: 'Country',
+    justOne: true
+});
+
+var corrupt =mongoose.model('corrupt',corruptSchema);
+
+
+//set the models
+loanSchema.pre('find',function() {
+    this.populate('corruption');
+});
+//loanSchema.plugin(autopopulate);
+
+var loanModel = mongoose.model('Loan', loanSchema);
+//module.exports = mongoose.model('Loans', loan);
+//perform search - similar to select * from loans limit 5;
+loanModel.find({},{},{limit: 1, sort:{timestamp:-1}}).exec(function(error, loans) {
+                if(error){throw error;}
+                //var loanitem = ls[i].toObject();
+
+                console.log("join virtual populate test::");
+
+                for (var i = 0; i<loans.length; i++) {
+                    var ln = loans[i].toObject();
+                    console.log(ln);
+                    //viewModel.loans[i]=loans[i].toObject();
+                    //console.log(loans[i].toObject());
+                }
+            });
+        
+    
+    
+
+        

@@ -1,3 +1,4 @@
 module.exports = {
-    'Loan': require('./loan')
+    'Loan': require('./loan'),
+    'Corrupt': require('./cindex')
 };

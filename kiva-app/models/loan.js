@@ -1,8 +1,11 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
-    path = require('path');
+    path = require('path'),
+    Cindex =require('./cindex');
 
-var loan = new Schema({
+mongoose.set('debug', true);
+
+var loanSchema = new Schema({
     loans: {
         id: {
             type: 'Number'
@@ -95,8 +98,17 @@ var loan = new Schema({
             type: 'Array'
         }
     }
+}, {toJSON: {virtuals:true}, toObject:{virtuals:true}});
+
+loanSchema.virtual('corruption', {
+    ref:'corrupt',
+    localField: 'location.country',
+    foreignField: 'Country',
+    justOne: true
 });
 
+loanSchema.pre('find',function() {
+    this.populate('corruption');
+});
 
-
-module.exports = mongoose.model('Loans', loan);
+module.exports = mongoose.model('Loans', loanSchema);
