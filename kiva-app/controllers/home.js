@@ -7,7 +7,7 @@ module.exports = {
             loans:[]
         };
 
-        LoanModel.find({},{},{limit: 3, sort:{timestamp:-1}}).exec(function(error, loans) {
+        LoanModel.find({},{},{limit: 4, sort:{timestamp:-1}}).exec(function(error, loans) {
                 if(error){throw error;}
 
                 for (var i = 0; i<loans.length; i++) {

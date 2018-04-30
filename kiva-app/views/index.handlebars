@@ -6,15 +6,18 @@
 
         <div class="row">
             {{#each loans}} 
-            <div class="card" style="width: 18rem">
+            <div class="card" style="width: 18rem; height: 36rem">
                 <a class="card-link" href="https://www.kiva.org/lend/{{id}}">
                     <img class="card-img-top" width="288" height="288" src="https://www.kiva.org/img/288x288/{{image.id}}.jpg}">
                 </a>
                 <div class="card-body">
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">{{name}} from {{location.country}} is requesting {{loan_amount}} {{use}}</li>
-                        <li class="list-group-item">{{location.country}} has a corruption index of {{corruption.CPI_score_2017 }}</li>
-                        <li class="list-group-item"><div id="chartContainer{{id}}"></div></li>
+                    </ul>
+                    <div id="chartContainer{{id}}" class="img-thumbnail">
+
+
+                    </div>
                         <script type="text/javascript">
                             var chart{{id}}= new CanvasJS.Chart("chartContainer{{id}}", {
                                 title :{
