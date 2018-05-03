@@ -11,16 +11,9 @@ module.exports = {
                 if(error){throw error;}
 
                 for (var i = 0; i<loans.length; i++) {
-                    //ln = loans[i].toObject();
-                    //console.log(ln);
                     viewModel.loans[i]=loans[i].toObject();
-                    //console.log(loans[i].toObject());
                 }
-
-                //viewModel.loans = loans;
-                //sidebar.sb(viewModel, function(viewModel) {
                 res.render('index',viewModel);
-                //});
-            });
+        });
     }
 };
